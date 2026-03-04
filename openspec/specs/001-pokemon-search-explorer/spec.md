@@ -1,6 +1,6 @@
 # Feature Specification: Pokémon Search & Exploration SPA
 
-**Feature Branch**: `1-pokemon-search-explorer`  
+**Feature Branch**: `001-pokemon-search-explorer`  
 **Created**: 2026-03-04  
 **Status**: Draft  
 **Input**: User description: "As a user I want a single page application to search and explore Pokémon."
