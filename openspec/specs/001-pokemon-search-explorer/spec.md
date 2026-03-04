@@ -5,6 +5,16 @@
 **Status**: Draft  
 **Input**: User description: "As a user I want a single page application to search and explore Pokémon."
 
+## Clarifications
+
+### Session 2026-03-04
+
+- Q: Should search match across the full Pokémon dataset or only currently loaded cards? → A: Search must match across the full Pokémon dataset.
+- Q: How should the Pokémon detail view open from a card? → A: Open detail in a modal overlay on the same page.
+- Q: What should be the canonical data source for Pokémon data? → A: Use live PokeAPI v2 as the canonical data source.
+- Q: What debounce delay should search use? → A: 500ms debounce delay.
+- Q: What retry behavior should API requests use on failure? → A: No automatic retry; show error immediately.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Discover Pokémon through searchable infinite list (Priority: P1)
@@ -48,7 +58,7 @@ As a user, I can open a Pokémon detail view from a card to inspect complete pro
 
 **Acceptance Scenarios**:
 
-1. **Given** a visible Pokémon card, **When** the user selects it, **Then** a detail view opens with image, name, types, abilities, height, weight, and all base stats.
+1. **Given** a visible Pokémon card, **When** the user selects it, **Then** a modal detail view opens on the same page with image, name, types, abilities, height, weight, and all base stats.
 2. **Given** the detail view is open, **When** stats are presented, **Then** base stats are visualized as a bar chart that enables quick relative comparison.
 
 ---
@@ -77,25 +87,28 @@ As a user, I always see meaningful loading or error states instead of blank scre
 - Image for a Pokémon fails to load.
 - Detail data fails after the card selection action has already occurred.
 - No initial data can be loaded on first page visit.
+- API request fails once and should surface an immediate user-friendly error without automatic retry.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
 - **FR-001**: System MUST provide a single-page interface with a search input at the top and Pokémon results displayed below.
-- **FR-002**: System MUST apply debounced search behavior so typing does not trigger a data request on every keystroke.
+- **FR-002**: System MUST apply a 500ms debounced search behavior so typing does not trigger a data request on every keystroke.
 - **FR-003**: System MUST display Pokémon in a responsive grid with 5 columns on large screens, 3 columns on tablet screens, and 2 columns on mobile screens.
 - **FR-004**: System MUST load additional Pokémon results progressively using infinite scroll without requiring manual pagination controls.
-- **FR-005**: System MUST reset list state when the search term changes and display only Pokémon matching the current name query.
+- **FR-005**: System MUST reset list state when the search term changes and display only Pokémon matching the current name query across the full Pokémon dataset, not just currently loaded cards.
 - **FR-006**: System MUST show a clear empty-state message when a search returns no matching Pokémon.
 - **FR-007**: System MUST display, on each Pokémon card, the Pokémon image, name, and base stats: HP, Attack, Defense, Special Attack, Special Defense, and Speed.
-- **FR-008**: System MUST allow users to open a Pokémon detail view by selecting a card.
+- **FR-008**: System MUST allow users to open a Pokémon detail view in a modal overlay on the same page by selecting a card.
 - **FR-009**: System MUST display in the detail view: image, name, types, abilities, height, weight, and all base stats.
 - **FR-010**: System MUST visualize all base stats in the detail view as a bar chart.
 - **FR-011**: System MUST show skeleton or shimmer placeholders in card positions while list data is loading.
 - **FR-012**: System MUST catch and handle data-loading failures for both list and detail retrieval flows.
 - **FR-013**: System MUST present user-friendly error messaging for failures and MUST NOT expose raw error output.
 - **FR-014**: System MUST maintain a non-blank usable interface during loading and error states.
+- **FR-015**: System MUST use live PokeAPI v2 as the canonical source for Pokémon list and detail data.
+- **FR-016**: System MUST NOT automatically retry failed list or detail API requests and MUST display an immediate user-friendly error state.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -105,10 +118,11 @@ As a user, I always see meaningful loading or error states instead of blank scre
 
 ### Assumptions
 
-- Name search is substring or prefix matching against Pokémon names and is case-insensitive from a user perspective.
-- Debounce delay follows common usability expectations for search (short pause) and does not require user configuration.
+- Name search is substring or prefix matching against Pokémon names and is case-insensitive from a user perspective, evaluated against the full Pokémon dataset.
+- Debounce delay is fixed at 500ms and does not require user configuration.
 - If provided source data contains standard six base stats, the UI uses those six canonical values.
 - Empty, loading, and error states must be visually distinct and readable on all supported viewport sizes.
+- PokeAPI v2 response fields for names, types, abilities, measurements, images, and base stats are treated as authoritative for display.
 
 ## Success Criteria *(mandatory)*
 
