@@ -2,6 +2,7 @@
 
 import { useQueries } from '@tanstack/react-query';
 import { useCallback, useMemo, useState } from 'react';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { PokemonDetailModal } from '@/components/pokemon/PokemonDetailModal';
 import { PokemonGrid } from '@/components/pokemon/PokemonGrid';
 import { SearchInput } from '@/components/search/SearchInput';
@@ -91,7 +92,10 @@ export default function PokemonDiscoveryPage() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <h1 className="mb-6 text-3xl font-bold">Pokémon Search &amp; Explorer</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Pokémon Search &amp; Explorer</h1>
+        <ThemeToggle />
+      </div>
 
       <div className="mb-8">
         <SearchInput onSearch={handleSearch} />
