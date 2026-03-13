@@ -3,14 +3,6 @@
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp/oauth"
-    },
-    "dart": {
-      "command": "dart",
-      "args": ["mcp-server"]
-    },
-    "mastra": {
-      "command": "npx",
-      "args": ["@mastra/mcp-docs-server@latest"]
     }
   }
 }
